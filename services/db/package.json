@@ -1,0 +1,24 @@
+{
+  "name": "@dinkylink/db",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "nixpig <143995476+nixpig@users.noreply.github.com>",
+  "homepage": "https://github.com/nixpig/dinkylink",
+  "license": "MIT",
+  "main": "lib/db.js",
+  "directories": {},
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nixpig/dinkylink.git"
+  },
+  "scripts": {},
+  "bugs": {
+    "url": "https://github.com/nixpig/dinkylink/issues"
+  }
+}
