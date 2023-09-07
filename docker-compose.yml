@@ -11,7 +11,7 @@ services:
       - .env
     command: ["--auth"]
     ports:
-      - 27017:27017
+      - 127.0.0.1:27017:27017
     volumes:
       - ./services/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:so
       - dinky_db_volume:/data/db
@@ -27,7 +27,7 @@ services:
     env_file:
       - .env
     ports:
-      - 8081:8081
+      - 127.0.0.1:8081:8081
     volumes:
       - ./services/api/lib:/usr/src/app/lib:so
     depends_on:
@@ -44,7 +44,7 @@ services:
     env_file:
       - .env
     ports:
-      - 8082:8082
+      - 127.0.0.1:8082:8082
     volumes:
       - ./services/ws/lib:/usr/src/app/lib:so
     depends_on:
@@ -61,7 +61,7 @@ services:
     env_file:
       - .env
     ports:
-      - 8080:8080
+      - 127.0.0.1:8080:8080
     volumes:
       - ./services/ui/dist:/usr/src/app/dist:so
     depends_on:
@@ -87,7 +87,7 @@ services:
     env_file:
       - .env
     ports:
-      - 6379:6379
+      - 127.0.0.1:6379:6379
     volumes:
       - dinky_cache_volume:/data
     depends_on:
