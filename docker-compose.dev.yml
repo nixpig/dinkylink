@@ -35,6 +35,23 @@ services:
     networks:
       - dinky_net
 
+  ws:
+    restart: always
+    image: dinkylink/ws
+    build:
+      context: services/ws
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 8082:8082
+    volumes:
+      - ./services/ws/lib:/usr/src/app/lib:so
+    depends_on:
+      - db
+    networks:
+      - dinky_net
+
   ui:
     restart: always
     image: dinkylink/ui

@@ -6,7 +6,7 @@ const init = async () => {
   await start();
   await connect();
   await client.connect();
-  console.log("⚡️ server up and running...");
+  console.log("⚡️ [api] server up and running...");
 };
 
 init();

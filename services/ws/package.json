@@ -1,0 +1,42 @@
+{
+  "name": "@dinkylink/ws",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "nixpig <143995476+nixpig@users.noreply.github.com>",
+  "homepage": "https://github.com/nixpig/dinkylink#readme",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "publishConfig": {
+    "registry": "https://registry.yarnpkg.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nixpig/dinkylink.git"
+  },
+  "scripts": {
+    "clean": "yarn rimraf lib",
+    "build": "yarn tsc",
+    "start": "yarn tsc --watch",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/nixpig/dinkylink/issues"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "ws": "^8.14.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.5.7"
+  }
+}

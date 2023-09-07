@@ -13,4 +13,4 @@ RUN yarn install
 
 CMD [ "npx", "nodemon", "lib/index.js" ]
 
-EXPOSE 8081
+EXPOSE 8082

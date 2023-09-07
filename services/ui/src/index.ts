@@ -8,6 +8,7 @@ import {
 } from "rxjs";
 
 const API_BASE_URL = `https://${process.env.API_HOST ?? "dinkylink.xyz"}`;
+const WS_BASE_URL = `wss://${process.env.WS_HOST ?? "ws.dinkylink.xyz"}`;
 
 const urlInput = document.getElementById("url-input") as HTMLInputElement;
 const outputPanel = document.getElementById("output-panel") as HTMLDivElement;
@@ -24,10 +25,6 @@ const outputAnchor = document.getElementById(
 const inputKeyups$ = fromEvent<InputEvent>(urlInput, "keyup");
 const generateButtonClicks$ = fromEvent<MouseEvent>(generateButton, "click");
 const copyButtonClicks$ = fromEvent<MouseEvent>(copyButton, "click");
-
-const saomething = () => {
-  console.log("something");
-};
 
 inputKeyups$
   .pipe(map((event: InputEvent) => (event.target as HTMLInputElement).value))
@@ -94,3 +91,13 @@ const createDinkyLink = async (url: string) =>
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ targetUrl: url }),
   }).then((res) => res.json());
+
+try {
+  const ws = new WebSocket(WS_BASE_URL);
+
+  ws.onmessage = (event) => {
+    console.log(event.data);
+  };
+} catch (error: any) {
+  console.error(`Error creating web socket connection: ${error?.message}`);
+}
