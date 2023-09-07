@@ -7,7 +7,7 @@ import {
   distinctUntilChanged,
 } from "rxjs";
 
-const API_BASE_URL = `https://${process.env.API_HOST}`;
+const API_BASE_URL = `https://${process.env.API_HOST ?? "dinkylink.xyz"}`;
 
 const urlInput = document.getElementById("url-input") as HTMLInputElement;
 const outputPanel = document.getElementById("output-panel") as HTMLDivElement;
