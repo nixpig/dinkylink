@@ -12,7 +12,7 @@ export const {
   DB_HOST = "localhost",
   DB_PORT = 27017,
   CACHE_HOST = "localhost",
-  CACHE_PORT = 6379,
+  CACHE_PORT = 8083,
   CACHE_USER,
   CACHE_PASSWORD,
 } = process.env;

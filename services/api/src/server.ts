@@ -5,16 +5,20 @@ import { linkRouter } from "./resources/link";
 
 import { API_PORT } from "./environment";
 
-const server = express();
+const app = express();
 
-server.use(express.urlencoded({ extended: true }));
-server.use(express.json());
-server.use(cors());
-server.options("*", cors());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cors());
+app.options("*", cors());
 
-server.use("/", linkRouter);
+app.use("/", linkRouter);
 
-export const start = () =>
-  new Promise((resolve) => {
-    server.listen(API_PORT, () => resolve(true));
-  });
+export const server = {
+  start: () =>
+    new Promise((resolve, reject) => {
+      app
+        .listen(API_PORT, () => resolve({ port: API_PORT }))
+        .on("error", (error: any) => reject(error?.message));
+    }),
+};

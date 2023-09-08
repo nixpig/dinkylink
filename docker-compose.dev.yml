@@ -91,9 +91,24 @@ services:
     # env_file:
     #   - .env
     ports:
-      - 6379:6379
+      - 8083:6379
     volumes:
       - dinky_cache_volume:/data
+    depends_on:
+      - api
+      - db
+    networks:
+      - dinky_net
+
+  broker:
+    restart: always
+    image: redis:7.2.0-alpine
+    # env_file:
+    #   - .env
+    ports:
+      - 8084:6379
+    volumes:
+      - dinky_broker_volume:/data
     depends_on:
       - api
       - db
@@ -103,6 +118,7 @@ services:
 volumes:
   dinky_db_volume:
   dinky_cache_volume:
+  dinky_broker_volume:
 
 networks:
   dinky_net:

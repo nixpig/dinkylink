@@ -5,7 +5,7 @@ import { UI_HOST } from "../../environment";
 
 import { Link, LinkData, LinkError } from "./link.models";
 
-import { client } from "../../services/cache";
+import { cache } from "../../services/cache";
 
 export const baseRedirect = async (
   req: Request,
@@ -24,33 +24,47 @@ export const shortRedirect = async (
   res: Response<LinkData | LinkError>
 ) => {
   const shortCode = req.params?.shortCode;
+
   if (!shortCode) {
     return res
       .status(500)
       .send({ status: 500, message: `Invalid shortcode: ${shortCode}` });
   }
 
+  let targetUrl: string;
+
   try {
-    const cachedResult = await client.get(shortCode);
+    const cachedResult = await cache.get(shortCode);
 
     if (cachedResult) {
-      console.log(`📝 [api] record fetched from cache`);
-      res.set("location", cachedResult);
-      return res.status(301).send();
+      targetUrl = cachedResult;
+    } else {
+      const queriedResult = await Link.findOne(
+        { shortCode: shortCode },
+        { targetUrl: 1 }
+      ).exec();
+      targetUrl = queriedResult?.targetUrl;
     }
 
-    const redirect = await Link.findOne(
-      { shortCode: shortCode },
-      { targetUrl: 1 }
-    ).exec();
+    if (targetUrl) {
+      console.log("targetUrl", targetUrl);
 
-    console.log(`🗄️ [api] record fetched from database`);
+      setTimeout(async () => {
+        console.log("checking cache");
+        const exists = await cache.exists(shortCode);
 
-    if (redirect.targetUrl) {
-      /* TODO: Capture click and save to DB/pub to stream */
-      client.set(shortCode, redirect.targetUrl);
+        if (exists !== 1) {
+          console.log("setting cache");
+          cache.set(shortCode, targetUrl);
+        }
 
-      res.set("location", redirect.targetUrl);
+        console.log("incrementing clicks");
+        incrementClicks(shortCode);
+      });
+
+      console.log("redirecting");
+
+      res.set("location", targetUrl);
       return res.status(301).send();
     } else {
       return res.status(500).send({ status: 500, message: "Link not found" });
@@ -103,11 +117,27 @@ export const createOne = async (
     });
 
     // 4. Cache result
-    await client.set(shortCode, targetUrl.href);
+    await cache.set(shortCode, targetUrl.href);
 
     // 5. Return complete object
     return res.status(201).send(link);
   } catch (error: any) {
     return res.status(500).send({ status: 500, message: `${error?.message}` });
+  }
+};
+
+const incrementClicks = async (shortCode: string) => {
+  try {
+    const link = await Link.findOneAndUpdate(
+      { shortCode },
+      { $inc: { clicks: 1 } },
+      { unique: true }
+    ).exec();
+
+    console.log(
+      `Incremented clicks for ${shortCode}; new count: ${link.clicks}`
+    );
+  } catch (error) {
+    console.error(`Failed to increment clicks for ${shortCode}`);
   }
 };
