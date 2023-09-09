@@ -7,8 +7,13 @@ import {
   distinctUntilChanged,
 } from "rxjs";
 
-const API_BASE_URL = `https://${process.env.API_HOST ?? "dinkylink.xyz"}`;
-const WS_BASE_URL = `wss://${process.env.WS_HOST ?? "ws.dinkylink.xyz"}`;
+const CREATE_BASE_URL = `https://${process.env.CREATE_HOST ?? "dinkylink.xyz"}`;
+const VIEW_BASE_URL = `wss://${process.env.VIEW_HOST ?? "view.dinkylink.xyz"}`;
+
+// const CREATE_BASE_URL = `https://${
+//   process.env.CREATE_HOST ?? "create.localhost"
+// }`;
+// const VIEW_BASE_URL = `wss://${process.env.VIEW_HOST ?? "view.localhost"}`;
 
 const urlInput = document.getElementById("url-input") as HTMLInputElement;
 const outputPanel = document.getElementById("output-panel") as HTMLDivElement;
@@ -53,10 +58,6 @@ inputKeyups$
         handleGenerateButtonState(true);
 
         return;
-      } else {
-        outputAnchor.textContent = `${API_BASE_URL}/${res?.shortCode}`;
-        outputAnchor.setAttribute("href", `${API_BASE_URL}/${res?.shortCode}`);
-        outputPanel.style.display = "block";
       }
     } catch (error: any) {
       alert(`Error creating link: ${error?.message}`);
@@ -85,18 +86,34 @@ const handleGenerateButtonState = (enabled: boolean): boolean => {
   }
 };
 
-const createDinkyLink = async (url: string) =>
-  await fetch(API_BASE_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ targetUrl: url }),
-  }).then((res) => res.json());
+const createDinkyLink = async (url: string) => {
+  try {
+    const res = await fetch(CREATE_BASE_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ targetUrl: url }),
+    }).then((res) => res.json());
 
+    return res;
+  } catch (error: any) {
+    alert(`Error creating link: ${error?.message}`);
+  }
+};
+
+// TODO: convert to rxjs stream and integrate with pipeline above
 try {
-  const ws = new WebSocket(WS_BASE_URL);
+  const ws = new WebSocket(VIEW_BASE_URL);
 
   ws.onmessage = (event) => {
-    console.log(event.data);
+    console.log(event);
+
+    const shortUrl = `https://${process.env.VISIT_HOST}/${
+      JSON.parse(event.data).shortCode
+    }`;
+
+    outputPanel.style.display = "block";
+    outputAnchor.textContent = shortUrl;
+    outputAnchor.setAttribute("href", shortUrl);
   };
 } catch (error: any) {
   console.error(`Error creating web socket connection: ${error?.message}`);

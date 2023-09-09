@@ -1,0 +1,25 @@
+import dotenv from "dotenv";
+
+dotenv.config();
+
+export const {
+  CREATE_HOST,
+  CREATE_PORT,
+  DB_HOST,
+  DB_PORT,
+  MONGO_USERNAME,
+  MONGO_PASSWORD,
+  MONGO_INITDB_DATABASE,
+  CACHE_HOST,
+  CACHE_PORT,
+  CACHE_USER,
+  CACHE_PASSWORD,
+  BROKER_HOST,
+  BROKER_PORT,
+  BROKER_USER,
+  BROKER_PASSWORD,
+} = process.env;
+
+export const DB_CONNECTION_STRING = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${DB_HOST}:${DB_PORT}/${MONGO_INITDB_DATABASE}?authSource=${MONGO_INITDB_DATABASE}`;
+export const CACHE_CONNECTION_STRING = `redis://${CACHE_HOST}:${CACHE_PORT}`;
+export const BROKER_CONNECTION_STRING = `redis://${BROKER_HOST}:${BROKER_PORT}`;
