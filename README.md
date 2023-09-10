@@ -1,5 +1,11 @@
 # dinkylink
 
+## Overview
+
+It's a pretty convoluted set up for such a simple app, but presented the opportunity to work with multiple Redis concepts and data structures.
+
+![dinkylink architecture diagram](files/dinkylink-arch-diagram.png "dinkylink architecture diagram")
+
 ## Running locally
 
 1. Clone the repo: `git clone https://github.com/nixpig/dinkylink.git`
