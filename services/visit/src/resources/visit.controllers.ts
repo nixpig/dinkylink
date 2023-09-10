@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 
-import { UI_HOST, VISIT_PORT } from "../environment";
-import { Visit, VisitData, VisitError } from "./visit.models";
+import { Visit } from "./visit.models";
 import { cache } from "../cache";
+import { addVisitToStream } from "../stream";
 
 export const visit = async (
   req: Request<{ shortCode: string }>,
@@ -36,6 +36,9 @@ export const visit = async (
       });
 
       res.set("location", targetUrl);
+
+      addVisitToStream({ shortCode });
+
       return res.status(302).send();
     } else {
       return res.set(404).send({ message: "Not Found" });

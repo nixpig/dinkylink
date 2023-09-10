@@ -11,7 +11,7 @@ services:
       - .env
     command: ["--auth"]
     ports:
-      - 127.0.0.1:27017:27017
+      - 127.0.0.1:${DB_PORT}:${DB_PORT}
     volumes:
       - ./services/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:so
       - dinky_db_volume:/data/db
@@ -27,7 +27,7 @@ services:
     env_file:
       - .env
     ports:
-      - 127.0.0.1:8081:8081
+      - 127.0.0.1:${CREATE_PORT}:${CREATE_PORT}
     volumes:
       - ./services/create/lib:/usr/src/app/lib:so
     depends_on:
@@ -44,11 +44,31 @@ services:
     env_file:
       - .env
     ports:
-      - 127.0.0.1:8082:8082
+      - 127.0.0.1:${VIEW_PORT}:${VIEW_PORT}
     volumes:
       - ./services/view/lib:/usr/src/app/lib:so
     depends_on:
       - broker
+    networks:
+      - dinky_net
+
+  stats:
+    restart: always
+    image: dinkylink/visit
+    build:
+      context: services/visit
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:${STATS_PORT}:${STATS_PORT}
+    volumes:
+      - ./services/stats/lib:/usr/src/app/lib:so
+    depends_on:
+      - broker
+      - cache
+      - db
+      - stream
     networks:
       - dinky_net
 
@@ -61,7 +81,7 @@ services:
     env_file:
       - .env
     ports:
-      - 127.0.0.1:8083:8083
+      - 127.0.0.1:${VISIT_PORT}:${VISIT_PORT}
     volumes:
       - ./services/visit/lib:/usr/src/app/lib:so
     depends_on:
@@ -80,7 +100,7 @@ services:
     env_file:
       - .env
     ports:
-      - 127.0.0.1:8080:8080
+      - 127.0.0.1:${UI_PORT}:${UI_PORT}
     volumes:
       - ./services/ui/dist:/usr/src/app/dist:so
     depends_on:
@@ -118,6 +138,7 @@ services:
       - cache
       - broker
       - ui
+      - stats
     networks:
       - dinky_net
 
