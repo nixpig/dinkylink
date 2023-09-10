@@ -1,7 +1,7 @@
 import { Server as WSServer } from "ws";
-import { VIEW_PORT } from "./environment";
+import { STATS_PORT } from "./environment";
 
-export const wss = new WSServer({ port: VIEW_PORT });
+export const wss = new WSServer({ port: STATS_PORT });
 
 export const startWSS = async () => {
   wss.on("connection", async (ws) => {

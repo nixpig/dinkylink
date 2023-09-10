@@ -14,13 +14,14 @@ export const listenToStream = async (
   const consumer = client;
   console.log(`[stats] trying to listen to stream: ${STREAM_KEY}`);
   await client.connect();
-  await client.xGroupCreate(STREAM_KEY, GROUP_NAME, ID_POSITION, {
-    MKSTREAM: true,
-  });
-  // const consumerExists = await consumer.exists(STREAM_KEY);
-  //
-  // if (!consumerExists) {
-  // }
+
+  const consumerExists = await consumer.exists(STREAM_KEY);
+
+  if (!consumerExists) {
+    await client.xGroupCreate(STREAM_KEY, GROUP_NAME, ID_POSITION, {
+      MKSTREAM: true,
+    });
+  }
 
   while (true) {
     console.log(`[stats] waiting for data in stream: ${STREAM_KEY}`);

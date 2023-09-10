@@ -12,12 +12,12 @@ It's a pretty convoluted set up for such a simple app, but presented the opportu
 1. Change into the directory: `cd dinkylink`
 1. Create a `.env` file: documented in the next section (a quick copy-paste will do the trick)
 1. Install dependencies and build: `yarn install && yarn build`
-1. Build and spin up the containers: `docker compose -f docker-compose.dev.yml up --build`
+1. Build and spin up the containers: `docker compose -f docker-compose.yml up --build`
 1. Go to [`https://ui.localhost`](https://ui.localhost) in your browser.
 
 ### `.env`
 
-The following environment variables are expected to be provided via a `.env` file. The defaults provided here will work just fine if you're just planning to spin up the apps using the provided `docker-compose.dev.yml`.
+The following environment variables are expected to be provided via a `.env` file. The defaults provided here will work just fine if you're just planning to spin up the apps using the provided `docker-compose.yml`.
 
 ```bash
 # Proxy

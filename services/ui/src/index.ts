@@ -9,6 +9,9 @@ import {
 
 const CREATE_BASE_URL = `https://${process.env.CREATE_HOST ?? "dinkylink.xyz"}`;
 const VIEW_BASE_URL = `wss://${process.env.VIEW_HOST ?? "view.dinkylink.xyz"}`;
+const STATS_BASE_URL = `wss://${
+  process.env.STATS_HOST ?? "stats.dinkylink.xyz"
+}`;
 
 // const CREATE_BASE_URL = `https://${
 //   process.env.CREATE_HOST ?? "create.localhost"
@@ -26,6 +29,8 @@ const generateButton = document.getElementById(
 const outputAnchor = document.getElementById(
   "output-link-tag"
 ) as HTMLAnchorElement;
+
+const stats = document.getElementById("stats") as HTMLDivElement;
 
 const inputKeyups$ = fromEvent<InputEvent>(urlInput, "keyup");
 const generateButtonClicks$ = fromEvent<MouseEvent>(generateButton, "click");
@@ -114,6 +119,18 @@ try {
     outputPanel.style.display = "block";
     outputAnchor.textContent = shortUrl;
     outputAnchor.setAttribute("href", shortUrl);
+  };
+} catch (error: any) {
+  console.error(`Error creating web socket connection: ${error?.message}`);
+}
+
+try {
+  const ws = new WebSocket(STATS_BASE_URL);
+
+  ws.onmessage = (event) => {
+    console.log(event);
+
+    stats.textContent = stats.textContent + "\n" + event.data;
   };
 } catch (error: any) {
   console.error(`Error creating web socket connection: ${error?.message}`);

@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const {
-  VIEW_HOST,
-  VIEW_PORT,
+  STATS_HOST,
+  STATS_PORT,
   STREAM_HOST,
   STREAM_PORT,
   STREAM_USER,

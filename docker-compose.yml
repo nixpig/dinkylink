@@ -124,6 +124,8 @@ services:
       - VIEW_PORT=${VIEW_PORT}
       - VISIT_HOST=${VISIT_HOST}
       - VISIT_PORT=${VISIT_PORT}
+      - STATS_HOST=${STATS_HOST}
+      - STATS_PORT=${STATS_PORT}
     ports:
       - 80:80
       - 443:443
