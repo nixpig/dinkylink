@@ -14,6 +14,11 @@
 The following environment variables are expected to be provided via a `.env` file. The defaults provided here will work just fine if you're just planning to spin up the apps using the provided `docker-compose.dev.yml`.
 
 ```bash
+# Proxy
+SSL_CERT=ui.localhost+4.pem
+SSL_CERT_KEY=ui.localhost+4-key.pem
+SSL_CERT_DIRECTORY=/home/nixpig/.ssl
+
 # UI
 UI_HOST=ui.localhost
 UI_PORT=8080
