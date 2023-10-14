@@ -4,7 +4,7 @@ import cors from "cors";
 
 import { createRouter } from "./resources";
 
-dotenv.config({ path: "../../.env" });
+dotenv.config();
 
 const app = express();
 

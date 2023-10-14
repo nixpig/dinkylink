@@ -29,9 +29,9 @@ export const createSchema = new Schema<CreateData>(
   { timestamps: true }
 );
 
-createSchema.post("save", async () => {
+createSchema.post("save", async (res) => {
   // TODO: Set in cache
   // TODO: Publish to event channel
 });
 
-export const CreateModel = model<CreateData>("Create", createSchema);
+export const CreateModel = model<CreateData>("Create", createSchema, "links");
