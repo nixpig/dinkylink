@@ -36,7 +36,7 @@ export const createOne = async (
       shortCode,
     });
 
-    console.log(`[create] created link: ${link}`);
+    console.log(`[create] created link: ${JSON.stringify(link)}`);
 
     return res.status(201).send(link);
   } catch (e) {

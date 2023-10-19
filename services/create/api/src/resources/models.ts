@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { publishLinkCreated } from "../services/bus";
 
 export interface CreateData {
   targetUrl: string;
@@ -30,8 +31,7 @@ export const createSchema = new Schema<CreateData>(
 );
 
 createSchema.post("save", async (res) => {
-  // TODO: Set in cache
-  // TODO: Publish to event channel
+  publishLinkCreated(res);
 });
 
 export const CreateModel = model<CreateData>("Create", createSchema, "links");

@@ -78,8 +78,19 @@ services:
     networks:
       - dinkylink_net
 
+  bus:
+    restart: always
+    image: redis:7.2.0-alpine
+    env_file:
+      - .env
+    volumes:
+      - bus_volume:/data
+    networks:
+      - dinkylink_net
+
 volumes:
   create_db_volume:
+  bus_volume:
 
 networks:
   dinkylink_net:
