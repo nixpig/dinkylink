@@ -78,6 +78,40 @@ services:
     networks:
       - dinkylink_net
 
+  view_api:
+    restart: always
+    image: dinkylink_view_api
+    build:
+      context: services/view/api
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:${VIEW_API_PORT}:${VIEW_API_PORT}
+    volumes:
+      - ./services/view/api/lib:/usr/src/app/lib:so
+    depends_on:
+      - cache
+    networks:
+      - dinkylink_net
+
+  view_ui:
+    restart: always
+    image: dinkylink_view_ui
+    build:
+      context: services/view/ui
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:${VIEW_UI_PORT}:${VIEW_UI_PORT}
+    volumes:
+      - ./services/view/ui/dist:/usr/src/app/dist:so
+    depends_on:
+      - cache
+    networks:
+      - dinkylink_net
+
   bus:
     restart: always
     image: redis:7.2.0-alpine
@@ -88,9 +122,21 @@ services:
     networks:
       - dinkylink_net
 
+  cache:
+    restart: always
+    image: redis:7.2.0-alpine
+    env_file:
+      - .env
+    volumes:
+      - cache_volume:/data
+    networks:
+      - dinkylink_net
+
 volumes:
   create_db_volume:
+  view_db_volume:
   bus_volume:
+  cache_volume:
 
 networks:
   dinkylink_net:
