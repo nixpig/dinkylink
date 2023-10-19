@@ -1,8 +1,54 @@
 db = new Mongo().getDB(`${process.env.MONGO_INITDB_DATABASE}`);
 
+console.log(`
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+
+  ${process.env.MONGO_INITDB_DATABASE}
+
+  ${process.env.CREATE_DB_USERNAME}
+
+  ${process.env.CREATE_DB_PASSWORD}
+
+  ${process.env.CREATE_DB_COLLECTION_NAME}
+
+  ${process.env.MONGO_INITDB_DATABASE}
+
+
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+### 
+`);
+
 db.createUser({
-  user: process.env.MONGO_USERNAME,
-  pwd: process.env.MONGO_PASSWORD,
+  user: process.env.CREATE_DB_USERNAME,
+  pwd: process.env.CREATE_DB_PASSWORD,
   roles: [
     {
       role: "readWrite",
@@ -11,5 +57,5 @@ db.createUser({
   ],
 });
 
-db.createCollection("links");
+db.createCollection(CREATE_DB_COLLECTION_NAME);
 db.links.insertOne({ link: "test" });

@@ -11,7 +11,7 @@
     "dist"
   ],
   "scripts": {
-    "clean": "yarn rimraf lib .parcel-cache",
+    "clean": "yarn rimraf dist lib .parcel-cache",
     "build": "yarn parcel build",
     "start": "yarn parcel -p 8082"
   },
@@ -19,6 +19,7 @@
     "parcel": "^2.10.0"
   },
   "devDependencies": {
+    "@types/node": "^20.8.6",
     "rimraf": "^5.0.5"
   }
 }

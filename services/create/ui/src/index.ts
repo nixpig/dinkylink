@@ -1,5 +1,3 @@
-const CREATE_API_HOST = "localhost";
-const CREATE_API_PORT = "8081";
 const CREATE_API_CONTEXT = "api/create";
 
 const $createInputEl = document.getElementById(
@@ -27,20 +25,17 @@ $createButtonEl.addEventListener("click", async (event) => {
 
 const createDinkyLink = async (url: string) => {
   try {
-    const res = await fetch(
-      `http://${CREATE_API_HOST}:${CREATE_API_PORT}/${CREATE_API_CONTEXT}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ targetUrl: url }),
-      }
-    ).then((res) => {
-      if (res.status < 400) {
-        return res.statusText;
-      } else {
-        throw new Error(res.statusText);
-      }
+    const res = await fetch(`http://localhost/${CREATE_API_CONTEXT}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ targetUrl: url }),
     });
+
+    if (res.status < 400) {
+      return res;
+    } else {
+      throw new Error(res.statusText);
+    }
   } catch (error: any) {
     alert(`Error creating link: ${error}`);
   }

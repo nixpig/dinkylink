@@ -1,0 +1,86 @@
+version: "3.1"
+
+services:
+  dinkylink_proxy:
+    restart: always
+    image: nginx:1.25.2-alpine
+    environment:
+      - SSL_CERT=${SSL_CERT}
+      - SSL_CERT_KEY=${SSL_CERT_KEY}
+      - SSL_CERT_DIRECTORY=${SSL_CERT_DIRECTORY}
+      - CREATE_API_PUBLIC_HOST=${CREATE_API_PUBLIC_HOST}
+      - CREATE_API_DOCKER_HOST=${CREATE_API_DOCKER_HOST}
+      - CREATE_API_PORT=${CREATE_API_PORT}
+      - CREATE_UI_PUBLIC_HOST=${CREATE_UI_PUBLIC_HOST}
+      - CREATE_UI_DOCKER_HOST=${CREATE_UI_DOCKER_HOST}
+      - CREATE_UI_PORT=${CREATE_UI_PORT}
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./services/proxy/templates:/etc/nginx/templates
+      - ${SSL_CERT_DIRECTORY}:/etc/dinkylink/ssl:so
+    depends_on:
+      - create_ui
+      - create_api
+      - create_db
+    networks:
+      - dinkylink_net
+
+  create_db:
+    restart: always
+    image: dinkylink_create_db
+    build:
+      context: services/create/db
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    command: ["--auth"]
+    ports:
+      - 127.0.0.1:${CREATE_DB_PORT}:${CREATE_DB_PORT}
+    volumes:
+      - ./services/create/db/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:sodocker
+      - create_db_volume:/data/db
+    networks:
+      - dinkylink_net
+
+  create_api:
+    restart: always
+    image: dinkylink_create_api
+    build:
+      context: services/create/api
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:${CREATE_API_PORT}:${CREATE_API_PORT}
+    volumes:
+      - ./services/create/api/lib:/usr/src/app/lib:so
+    depends_on:
+      - create_db
+    networks:
+      - dinkylink_net
+
+  create_ui:
+    restart: always
+    image: dinkylink_create_ui
+    build:
+      context: services/create/ui
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:${CREATE_UI_PORT}:${CREATE_UI_PORT}
+    volumes:
+      - ./services/create/ui/dist:/usr/src/app/dist:so
+    depends_on:
+      - create_api
+    networks:
+      - dinkylink_net
+
+volumes:
+  create_db_volume:
+
+networks:
+  dinkylink_net:
+    driver: bridge

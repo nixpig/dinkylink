@@ -3,4 +3,4 @@ import { createOne } from "./controllers";
 
 export const createRouter = express.Router();
 
-createRouter.post("/", createOne);
+createRouter.post("/create", createOne);

@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import morgan from "morgan";
 
 import { createRouter } from "./resources";
 
@@ -8,12 +9,13 @@ dotenv.config();
 
 const app = express();
 
+app.use(morgan("tiny"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 app.options("*", cors());
 
-app.use("/", createRouter);
+app.use("/api", createRouter);
 
 export const startServer = () => {
   return new Promise<{ port: number }>((res, rej) => {

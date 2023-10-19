@@ -16,12 +16,20 @@ exports.database = void 0;
 const dotenv_1 = __importDefault(require("dotenv"));
 const mongoose_1 = __importDefault(require("mongoose"));
 dotenv_1.default.config();
-const DB_CONNECTION_STRING = `mongodb://${process.env.CREATE_DB_USERNAME}:${process.env.CREATE_DB_PASSWORD}@${process.env.CREATE_DB_HOST}:${process.env.CREATE_DB_PORT}/${process.env.MONGO_INITDB_DATABASE}?authSource=${process.env.MONGO_INITDB_DATABASE}`;
+const DB_CONNECTION_STRING = `mongodb://${process.env.CREATE_DB_USERNAME}:${process.env.CREATE_DB_PASSWORD}@${process.env.CREATE_DB_DOCKER_HOST}:${process.env.CREATE_DB_PORT}/${process.env.MONGO_INITDB_DATABASE}?authSource=${process.env.MONGO_INITDB_DATABASE}`;
+console.log(`
+###
+###
+###
+${DB_CONNECTION_STRING}
+
+###
+###
+###
+
+`);
 exports.database = {
-    connect: () => __awaiter(void 0, void 0, void 0, function* () {
-        const connection = yield mongoose_1.default.connect(DB_CONNECTION_STRING);
-        return connection;
-    }),
+    connect: () => __awaiter(void 0, void 0, void 0, function* () { return yield mongoose_1.default.connect(DB_CONNECTION_STRING); }),
     disconnect: () => __awaiter(void 0, void 0, void 0, function* () { return yield mongoose_1.default.disconnect(); }),
 };
 //# sourceMappingURL=database.js.map
