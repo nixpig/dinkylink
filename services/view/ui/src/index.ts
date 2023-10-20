@@ -2,13 +2,20 @@ const VIEW_API_PUBLIC_HOST = "go.localhost";
 const $viewLinkAnchorEl = document.getElementById("view__link");
 const $viewClipboardButtonEl = document.getElementById("view__clipboard");
 
+const uuid = new URL(window.location.href).searchParams.get("uuid");
+
 $viewClipboardButtonEl?.addEventListener("click", (event) => {
   event.preventDefault();
   console.log("copy to clipboard");
 });
 
 try {
-  const ws = new WebSocket(`ws://${VIEW_API_PUBLIC_HOST}`);
+  console.log(
+    `[view] connecting to web socket: ws://${VIEW_API_PUBLIC_HOST}?uuid=${uuid}`
+  );
+  const ws = new WebSocket(`ws://${VIEW_API_PUBLIC_HOST}?uuid=${uuid}`);
+
+  console.log("[view] connected to web socket: ", ws);
 
   let shortUrl: string;
 

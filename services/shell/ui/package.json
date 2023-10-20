@@ -1,0 +1,26 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "source": "index.html",
+  "license": "MIT",
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "index.html",
+    "dist"
+  ],
+  "scripts": {
+    "clean": "yarn rimraf dist lib .parcel-cache",
+    "build": "yarn parcel build",
+    "start": "yarn parcel -p 8085"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "parcel": "^2.10.0",
+    "rimraf": "^5.0.5"
+  },
+  "dependencies": {
+    "uuid": "^9.0.1"
+  }
+}

@@ -9,6 +9,7 @@ export const createOne = async (
 ) => {
   let targetUrl: URL;
   let shortCode: string;
+  let uuid = req.query.uuid as string;
 
   try {
     targetUrl = new URL(req.body?.targetUrl);
@@ -33,6 +34,7 @@ export const createOne = async (
     const link = await CreateModel.create<CreateData>({
       targetUrl: targetUrl.href,
       active: true,
+      uuid,
       shortCode,
     });
 

@@ -112,6 +112,24 @@ services:
     networks:
       - dinkylink_net
 
+  shell_ui:
+    restart: always
+    image: dinkylink_shell_ui
+    build:
+      context: services/shell/ui
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:${SHELL_UI_PORT}:${SHELL_UI_PORT}
+    volumes:
+      - ./services/shell/ui/dist:/usr/src/app/dist:so
+    depends_on:
+      - create_ui
+      - view_ui
+    networks:
+      - dinkylink_net
+
   bus:
     restart: always
     image: redis:7.2.0-alpine

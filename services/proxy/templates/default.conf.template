@@ -5,6 +5,17 @@ server {
 	listen 80;
 	listen [::]:80;
 
+	server_name localhost;
+
+	location / {
+		proxy_pass http://shell_ui:8085;
+	}
+}
+
+server {
+	listen 80;
+	listen [::]:80;
+
 	server_name go.localhost;
 
 	proxy_set_header Upgrade $http_upgrade;
@@ -34,7 +45,7 @@ server {
 	listen 80;
 	listen [::]:80;
 
-	server_name localhost;
+	server_name create.localhost;
 
 	location / {
 			proxy_pass http://create_ui:8082;

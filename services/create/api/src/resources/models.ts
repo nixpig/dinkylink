@@ -4,6 +4,7 @@ import { publishLinkCreated } from "../services/bus";
 export interface CreateData {
   targetUrl: string;
   shortCode: string;
+  uuid: string;
   active: boolean;
 }
 
@@ -21,6 +22,10 @@ export const createSchema = new Schema<CreateData>(
       type: String,
       required: true,
       unique: true,
+    },
+    uuid: {
+      type: String,
+      required: true,
     },
     active: {
       type: Boolean,
