@@ -88,6 +88,7 @@ services:
       - .env
     ports:
       - 127.0.0.1:${VIEW_API_PORT}:${VIEW_API_PORT}
+      - 127.0.0.1:${VIEW_GO_PORT}:${VIEW_GO_PORT}
     volumes:
       - ./services/view/api/lib:/usr/src/app/lib:so
     depends_on:

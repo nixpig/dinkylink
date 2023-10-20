@@ -13,11 +13,13 @@ export const startWebSocketServer = async () => {
   console.log("[view] created web socket server");
 
   wss.on("connection", (ws, req) => {
-    console.log("[view] received web socket connection");
-
     const {
       query: { uuid },
     } = url.parse(req.url, true);
+
+    console.log(
+      `[view] received web socket connection from client uuid: ${uuid}`
+    );
 
     clients[`${uuid}`] = ws;
 
@@ -35,7 +37,7 @@ export const startWebSocketServer = async () => {
     });
 
     ws.on("error", (e) => {
-      console.error(`[view] an error occurred in socket: ${JSON.stringify(e)}`);
+      console.error(`[view] an error occurred in socket: ${e.message}`);
     });
   });
 };

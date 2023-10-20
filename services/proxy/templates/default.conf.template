@@ -16,7 +16,7 @@ server {
 	listen 80;
 	listen [::]:80;
 
-	server_name go.localhost;
+	server_name viewsocket.localhost;
 
 	proxy_set_header Upgrade $http_upgrade;
 	proxy_set_header Connection "upgrade";
@@ -27,6 +27,17 @@ server {
 		expires 0;
 
 		proxy_pass http://view_api:8084;
+	}
+}
+
+server {
+	listen 80;
+	listen [::]:80;
+
+	server_name go.localhost;
+
+	location / {
+		proxy_pass http://view_api:8086;
 	}
 }
 

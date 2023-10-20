@@ -1,7 +1,18 @@
 import { subscriber } from "./services/subscriber";
+import { cache } from "./services/cache";
 import { startWebSocketServer } from "./services/socket";
+import { startServer } from "./server";
 
 const init = async () => {
+  try {
+    const server = await startServer();
+    console.log(
+      `[view] express server started on port: ${JSON.stringify(server.port)}`
+    );
+  } catch (e) {
+    console.error(`[view] failed to start express server: ${e.message}`);
+  }
+
   try {
     await subscriber.connect();
     console.log(`[view] subscriber connected`);
@@ -14,6 +25,13 @@ const init = async () => {
     console.log("[view] web socket server started");
   } catch (e) {
     console.error(`[view] failed to start web socket server: ${e.message}`);
+  }
+
+  try {
+    await cache.connect();
+    console.log("[view] connected to cache");
+  } catch (e) {
+    console.error(`[view] failed to connect to cache: ${e.message}`);
   }
 };
 

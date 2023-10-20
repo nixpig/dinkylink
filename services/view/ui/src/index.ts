@@ -1,4 +1,6 @@
-const VIEW_API_PUBLIC_HOST = "go.localhost";
+const VIEW_SOCKET_PUBLIC_HOST = "viewsocket.localhost";
+const VIEW_GO_PUBLIC_HOST = "go.localhost";
+
 const $viewLinkAnchorEl = document.getElementById("view__link");
 const $viewClipboardButtonEl = document.getElementById("view__clipboard");
 
@@ -11,9 +13,9 @@ $viewClipboardButtonEl?.addEventListener("click", (event) => {
 
 try {
   console.log(
-    `[view] connecting to web socket: ws://${VIEW_API_PUBLIC_HOST}?uuid=${uuid}`
+    `[view] connecting to web socket: ws://${VIEW_SOCKET_PUBLIC_HOST}?uuid=${uuid}`
   );
-  const ws = new WebSocket(`ws://${VIEW_API_PUBLIC_HOST}?uuid=${uuid}`);
+  const ws = new WebSocket(`ws://${VIEW_SOCKET_PUBLIC_HOST}?uuid=${uuid}`);
 
   console.log("[view] connected to web socket: ", ws);
 
@@ -35,7 +37,7 @@ try {
       `[view] web socket client received event: ${JSON.stringify(event)}`
     );
 
-    shortUrl = `https://${VIEW_API_PUBLIC_HOST}/${
+    shortUrl = `https://${VIEW_GO_PUBLIC_HOST}/${
       JSON.parse(event.data).shortCode
     }`;
 
