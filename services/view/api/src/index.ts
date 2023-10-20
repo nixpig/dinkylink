@@ -1,5 +1,6 @@
 import { subscriber } from "./services/subscriber";
 import { cache } from "./services/cache";
+import { bus } from "./services/bus";
 import { startWebSocketServer } from "./services/socket";
 import { startServer } from "./server";
 
@@ -18,6 +19,13 @@ const init = async () => {
     console.log(`[view] subscriber connected`);
   } catch (e) {
     console.error(`[view] subscriber failed to connect: ${e.message}`);
+  }
+
+  try {
+    await bus.connect();
+    console.log("[view] connected to message bus");
+  } catch (e) {
+    console.error("[view] failed to connect to message bus");
   }
 
   try {

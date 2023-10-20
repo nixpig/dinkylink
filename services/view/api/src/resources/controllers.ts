@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { publishLinkVisited } from "../services/bus";
 import { cache } from "../services/cache";
 
 export const view = async (
@@ -19,6 +20,8 @@ export const view = async (
       console.log(`[view] setting redirect location: ${targetUrl}`);
       res.set("location", targetUrl);
     }
+
+    publishLinkVisited({ shortCode, targetUrl });
 
     console.log(`[view] initiating redirect to ${targetUrl}`);
     return res.status(302).send();

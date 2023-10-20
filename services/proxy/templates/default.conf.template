@@ -22,10 +22,6 @@ server {
 	proxy_set_header Connection "upgrade";
 
 	location / {
-		add_header Cache-Control 'no-store';
-		add_header Cache-Control 'no-cache';
-		expires 0;
-
 		proxy_pass http://view_api:8084;
 	}
 }
@@ -37,6 +33,10 @@ server {
 	server_name go.localhost;
 
 	location / {
+		add_header Cache-Control 'no-store';
+		add_header Cache-Control 'no-cache';
+		expires 0;
+
 		proxy_pass http://view_api:8086;
 	}
 }
