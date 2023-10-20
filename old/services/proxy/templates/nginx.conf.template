@@ -1,3 +1,6 @@
+# -*- mode: nginx -*-
+# vi: set ft=nginx :
+
 server {
 	listen 80;
 	listen [::]:80;

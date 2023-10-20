@@ -7,6 +7,9 @@ server {
 
 	server_name go.localhost;
 
+	proxy_set_header Upgrade $http_upgrade;
+	proxy_set_header Connection "upgrade";
+
 	location / {
 		add_header Cache-Control 'no-store';
 		add_header Cache-Control 'no-cache';
