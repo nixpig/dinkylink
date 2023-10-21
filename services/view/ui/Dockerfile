@@ -1,13 +1,23 @@
-FROM node:18.0.0-alpine3.14
+FROM node:18.0.0
+ARG VIEW_UI_PORT
+ARG VIEW_SOCKET_PUBLIC_HOST
+ARG VIEW_GO_PUBLIC_HOST
 
-ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-
-USER node
+ENV VIEW_UI_PORT=$VIEW_UI_PORT
+ENV VIEW_SOCKET_PUBLIC_HOST=$VIEW_SOCKET_PUBLIC_HOST
+ENV VIEW_GO_PUBLIC_HOST=$VIEW_GO_PUBLIC_HOST
 
 WORKDIR /usr/src/app
 
-COPY dist dist
+COPY package.json package.json
+COPY src src
+COPY index.html index.html
 
-CMD [ "npx", "http-server", "-p", "8083", "dist/"]
+RUN echo "VIEW_SOCKET_PUBLIC_HOST=$VIEW_SOCKET_PUBLIC_HOST" >> .env
+RUN echo "VIEW_GO_PUBLIC_HOST=$VIEW_GO_PUBLIC_HOST" >> .env
 
-EXPOSE 8083
+RUN yarn && yarn build
+
+CMD ["sh", "-c", "npx http-server -p ${VIEW_UI_PORT} dist/"]
+
+EXPOSE ${VIEW_UI_PORT}

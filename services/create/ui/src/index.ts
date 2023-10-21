@@ -1,4 +1,7 @@
 const CREATE_API_CONTEXT = "api/create";
+const CREATE_API_PUBLIC_HOST = process.env.CREATE_API_PUBLIC_HOST;
+
+console.log({ CREATE_API_PUBLIC_HOST });
 
 const uuid = new URL(window.location.href).searchParams.get("uuid");
 
@@ -22,13 +25,14 @@ $createButtonEl.addEventListener("click", async (event) => {
   event.preventDefault();
 
   const res = await createDinkyLink($createInputEl.value);
-  console.log({ res });
+  const json = await res?.json();
+  console.log(json);
 });
 
 const createDinkyLink = async (url: string) => {
   try {
     const res = await fetch(
-      `http://create.localhost/${CREATE_API_CONTEXT}?uuid=${uuid}`,
+      `https://${CREATE_API_PUBLIC_HOST}/${CREATE_API_CONTEXT}?uuid=${uuid}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },

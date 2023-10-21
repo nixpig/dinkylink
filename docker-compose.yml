@@ -8,18 +8,30 @@ services:
       - SSL_CERT=${SSL_CERT}
       - SSL_CERT_KEY=${SSL_CERT_KEY}
       - SSL_CERT_DIRECTORY=${SSL_CERT_DIRECTORY}
+      - SHELL_UI_PUBLIC_HOST=${SHELL_UI_PUBLIC_HOST}
+      - VIEW_UI_PUBLIC_HOST=${VIEW_UI_PUBLIC_HOST}
+      - VIEW_SOCKET_PUBLIC_HOST=${VIEW_SOCKET_PUBLIC_HOST}
+      - VIEW_GO_PUBLIC_HOST=${VIEW_GO_PUBLIC_HOST}
       - CREATE_API_PUBLIC_HOST=${CREATE_API_PUBLIC_HOST}
-      - CREATE_API_DOCKER_HOST=${CREATE_API_DOCKER_HOST}
-      - CREATE_API_PORT=${CREATE_API_PORT}
-      - CREATE_UI_PUBLIC_HOST=${CREATE_UI_PUBLIC_HOST}
+      - SHELL_UI_DOCKER_HOST=${SHELL_UI_DOCKER_HOST}
+      - SHELL_UI_PORT=${SHELL_UI_PORT}
+      - VIEW_UI_DOCKER_HOST=${VIEW_UI_DOCKER_HOST}
+      - VIEW_UI_PORT=${VIEW_UI_PORT}
+      - VIEW_API_DOCKER_HOST=${VIEW_API_DOCKER_HOST}
+      - VIEW_API_PORT=${VIEW_API_PORT}
+      - VIEW_GO_DOCKER_HOST=${VIEW_GO_DOCKER_HOST}
+      - VIEW_GO_PORT=${VIEW_GO_PORT}
       - CREATE_UI_DOCKER_HOST=${CREATE_UI_DOCKER_HOST}
       - CREATE_UI_PORT=${CREATE_UI_PORT}
+      - CREATE_API_DOCKER_HOST=${CREATE_API_DOCKER_HOST}
+      - CREATE_API_PORT=${CREATE_API_PORT}
+
     ports:
       - 80:80
       - 443:443
     volumes:
       - ./services/proxy/templates:/etc/nginx/templates
-      - ${SSL_CERT_DIRECTORY}:/etc/dinkylink/ssl:so
+      - ${SSL_CERT_DIRECTORY}:/etc/nginx/ssl:so
     depends_on:
       - create_ui
       - create_api
@@ -50,12 +62,12 @@ services:
     build:
       context: services/create/api
       dockerfile: Dockerfile
+      args:
+        - CREATE_API_PORT=${CREATE_API_PORT}
     env_file:
       - .env
     ports:
       - 127.0.0.1:${CREATE_API_PORT}:${CREATE_API_PORT}
-    volumes:
-      - ./services/create/api/lib:/usr/src/app/lib:so
     depends_on:
       - create_db
     networks:
@@ -67,12 +79,11 @@ services:
     build:
       context: services/create/ui
       dockerfile: Dockerfile
-    env_file:
-      - .env
+      args:
+        - CREATE_UI_PORT=${CREATE_UI_PORT}
+        - CREATE_API_PUBLIC_HOST=${CREATE_API_PUBLIC_HOST}
     ports:
       - 127.0.0.1:${CREATE_UI_PORT}:${CREATE_UI_PORT}
-    volumes:
-      - ./services/create/ui/dist:/usr/src/app/dist:so
     depends_on:
       - create_api
     networks:
@@ -84,13 +95,13 @@ services:
     build:
       context: services/view/api
       dockerfile: Dockerfile
+      args:
+        - VIEW_API_PORT=${VIEW_API_PORT}
     env_file:
       - .env
     ports:
       - 127.0.0.1:${VIEW_API_PORT}:${VIEW_API_PORT}
       - 127.0.0.1:${VIEW_GO_PORT}:${VIEW_GO_PORT}
-    volumes:
-      - ./services/view/api/lib:/usr/src/app/lib:so
     depends_on:
       - cache
     networks:
@@ -102,12 +113,12 @@ services:
     build:
       context: services/view/ui
       dockerfile: Dockerfile
-    env_file:
-      - .env
+      args:
+        - VIEW_UI_PORT=${VIEW_UI_PORT}
+        - VIEW_SOCKET_PUBLIC_HOST=${VIEW_SOCKET_PUBLIC_HOST}
+        - VIEW_GO_PUBLIC_HOST=${VIEW_GO_PUBLIC_HOST}
     ports:
       - 127.0.0.1:${VIEW_UI_PORT}:${VIEW_UI_PORT}
-    volumes:
-      - ./services/view/ui/dist:/usr/src/app/dist:so
     depends_on:
       - cache
     networks:
@@ -119,12 +130,12 @@ services:
     build:
       context: services/shell/ui
       dockerfile: Dockerfile
-    env_file:
-      - .env
+      args:
+        - SHELL_UI_PORT=${SHELL_UI_PORT}
+        - CREATE_UI_PUBLIC_HOST=${CREATE_UI_PUBLIC_HOST}
+        - VIEW_UI_PUBLIC_HOST=${VIEW_UI_PUBLIC_HOST}
     ports:
       - 127.0.0.1:${SHELL_UI_PORT}:${SHELL_UI_PORT}
-    volumes:
-      - ./services/shell/ui/dist:/usr/src/app/dist:so
     depends_on:
       - create_ui
       - view_ui

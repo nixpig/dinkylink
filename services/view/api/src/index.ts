@@ -1,8 +1,11 @@
+import dotenv from "dotenv";
 import { subscriber } from "./services/subscriber";
 import { cache } from "./services/cache";
 import { bus } from "./services/bus";
 import { startWebSocketServer } from "./services/socket";
 import { startServer } from "./server";
+
+dotenv.config();
 
 const init = async () => {
   try {

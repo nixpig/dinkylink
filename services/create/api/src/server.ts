@@ -1,11 +1,8 @@
-import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 
 import { createRouter } from "./resources";
-
-dotenv.config();
 
 const app = express();
 

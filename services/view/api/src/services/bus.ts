@@ -1,7 +1,4 @@
 import { createClient } from "redis";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 const connectionString = `redis://${process.env.BUS_DOCKER_HOST}:${process.env.BUS_PORT}`;
 

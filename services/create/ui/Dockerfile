@@ -1,13 +1,20 @@
-FROM node:18.0.0-alpine3.14
+FROM node:18.0.0
+ARG CREATE_UI_PORT
+ARG CREATE_API_PUBLIC_HOST
 
-ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-
-USER node
+ENV CREATE_UI_PORT=$CREATE_UI_PORT
+ENV CREATE_API_PUBLIC_HOST=$CREATE_API_PUBLIC_HOST
 
 WORKDIR /usr/src/app
 
-COPY dist dist
+COPY package.json package.json
+COPY src src
+COPY index.html index.html
 
-CMD [ "npx", "http-server", "-p", "8082", "dist/"]
+RUN echo "CREATE_API_PUBLIC_HOST=$CREATE_API_PUBLIC_HOST" >> .env
 
-EXPOSE 8082
+RUN yarn && yarn build
+
+CMD [ "sh", "-c", "npx http-server -p ${CREATE_UI_PORT} dist/"]
+
+EXPOSE ${CREATE_UI_PORT}

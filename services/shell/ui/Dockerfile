@@ -1,13 +1,23 @@
-FROM node:18.0.0-alpine3.14
+FROM node:18.0.0
+ARG SHELL_UI_PORT
+ARG CREATE_UI_PUBLIC_HOST
+ARG VIEW_UI_PUBLIC_HOST
 
-ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-
-USER node
+ENV SHELL_UI_PORT=$SHELL_UI_PORT
+ENV CREATE_UI_PUBLIC_HOST=$CREATE_UI_PUBLIC_HOST
+ENV VIEW_UI_PUBLIC_HOST=$VIEW_UI_PUBLIC_HOST
 
 WORKDIR /usr/src/app
 
-COPY dist dist
+COPY package.json package.json
+COPY src src
+COPY index.html index.html
 
-CMD [ "npx", "http-server", "-p", "8085", "dist/"]
+RUN echo "CREATE_UI_PUBLIC_HOST=$CREATE_UI_PUBLIC_HOST" >> .env
+RUN echo "VIEW_UI_PUBLIC_HOST=$VIEW_UI_PUBLIC_HOST" >> .env
 
-EXPOSE 8085
+RUN yarn && yarn build
+
+CMD [ "sh", "-c", "npx http-server -p ${SHELL_UI_PORT} dist/"]
+
+EXPOSE ${SHELL_UI_PORT}

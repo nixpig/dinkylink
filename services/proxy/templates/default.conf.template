@@ -5,65 +5,51 @@ server {
 	listen 80;
 	listen [::]:80;
 
-	server_name localhost;
+	server_name ${SHELL_UI_PUBLIC_HOST} ${VIEW_UI_PUBLIC_HOST} ${VIEW_SOCKET_PUBLIC_HOST} ${VIEW_GO_PUBLIC_HOST} ${CREATE_API_PUBLIC_HOST};
 
-	location / {
-		proxy_pass http://shell_ui:8085;
-	}
+	return 301 https://$host$request_uri;
 }
 
 server {
-	listen 80;
-	listen [::]:80;
+	listen 443 ssl;
+	listen [::]:443 ssl;
 
-	server_name viewsocket.localhost;
+	server_name ${SHELL_UI_PUBLIC_HOST} ${VIEW_UI_PUBLIC_HOST} ${VIEW_SOCKET_PUBLIC_HOST} ${VIEW_GO_PUBLIC_HOST} ${CREATE_API_PUBLIC_HOST};
+
+	ssl_certificate ssl/${SSL_CERT};
+	ssl_certificate_key ssl/${SSL_CERT_KEY}; 
 
 	proxy_set_header Upgrade $http_upgrade;
 	proxy_set_header Connection "upgrade";
 
 	location / {
-		proxy_pass http://view_api:8084;
-	}
-}
+		if ($host = ${SHELL_UI_PUBLIC_HOST}) {
+			proxy_pass http://${SHELL_UI_DOCKER_HOST}:${SHELL_UI_PORT};
+		}
 
-server {
-	listen 80;
-	listen [::]:80;
+		if ($host = ${VIEW_UI_PUBLIC_HOST}) {
+			proxy_pass http://${VIEW_UI_DOCKER_HOST}:${VIEW_UI_PORT};
+		}
 
-	server_name go.localhost;
+		if ($host = ${VIEW_SOCKET_PUBLIC_HOST}) {
+			proxy_pass http://${VIEW_API_DOCKER_HOST}:${VIEW_API_PORT};
+		}
 
-	location / {
-		add_header Cache-Control 'no-store';
-		add_header Cache-Control 'no-cache';
-		expires 0;
 
-		proxy_pass http://view_api:8086;
-	}
-}
+		if ($host = ${VIEW_GO_PUBLIC_HOST}) {
+			add_header Cache-Control 'no-store';
+			add_header Cache-Control 'no-cache';
+			expires 0;
 
-server {
-	listen 80;
-	listen [::]:80;
+			proxy_pass http://${VIEW_GO_DOCKER_HOST}:${VIEW_GO_PORT};
+		}
 
-	server_name view.localhost;
-
-	location / {
-		proxy_pass http://view_ui:8083;
-	}
-}
-
-server {
-	listen 80;
-	listen [::]:80;
-
-	server_name create.localhost;
-
-	location / {
-			proxy_pass http://create_ui:8082;
+		if ($host = ${CREATE_API_PUBLIC_HOST}) {
+				proxy_pass http://${CREATE_UI_DOCKER_HOST}:${CREATE_UI_PORT};
+		}
 	}
 
 	location /api {
-		proxy_pass http://create_api:8081/api;
+		proxy_pass http://${CREATE_API_DOCKER_HOST}:${CREATE_API_PORT}/api;
 	}
 }
-

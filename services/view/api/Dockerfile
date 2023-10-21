@@ -1,16 +1,14 @@
-FROM node:18.0.0-alpine3.14
-
-ENV NPM_CONFIG_PREFIX=/home/node/.npm-global
-
-USER node
+FROM node:18.0.0
+ARG VIEW_API_PORT
 
 WORKDIR /usr/src/app
 
 COPY package.json package.json
-COPY lib lib
+COPY tsconfig.json tsconfig.json
+COPY src src
 
-RUN yarn install
+RUN yarn && yarn build
 
 CMD [ "npx", "nodemon", "lib/index.js" ]
 
-EXPOSE 8084
+EXPOSE ${VIEW_API_PORT}

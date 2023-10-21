@@ -1,6 +1,9 @@
+import dotenv from "dotenv";
 import { startServer } from "./server";
 import { database } from "./services/database";
 import { bus } from "./services/bus";
+
+dotenv.config();
 
 const init = async () => {
   try {

@@ -1,9 +1,6 @@
 import { Server as WSServer } from "ws";
 import { subscriber } from "./subscriber";
-import dotenv from "dotenv";
 import url from "url";
-
-dotenv.config();
 
 const clients = {};
 
