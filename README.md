@@ -8,9 +8,18 @@ Obviously, this is a pretty convoluted set up for such a simple app, but allowed
 
 ![dinkylink architecture diagram](dinkylink-architecture.png "dinkylink architecture diagram")
 
+## Spinning up...
+
+If you're feeling brave and want to spin this up locally, just create an `.env` file as detailed below (you should be able to just copy and paste, changing only the path to your localhost SSL certs), then run:
+
+```shell
+docker compose up --build
+```
+
 ### `.env` example
 
 ```shell
+# example configuration to run locally
 
 # PROXY
 SSL_CERT=localhost.pem
@@ -66,5 +75,14 @@ BUS_PORT=6379
 # CACHE
 CACHE_DOCKER_HOST=cache
 CACHE_PORT=6379
+
+# STREAM
+STREAM_DOCKER_HOST=stream
+STREAM_PORT=6379
+
+# STATS
+STATS_API_DOCKER_HOST=stats_api
+STATS_API_PUBLIC_HOST=stats.localhost
+STATS_API_PORT=8087
 
 ```
