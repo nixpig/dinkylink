@@ -162,11 +162,39 @@ services:
     networks:
       - dinkylink_net
 
+  stream:
+    restart: always
+    image: redis:7.2.0-alpine
+    env_file:
+      - .env
+    volumes:
+      - stream_volume:/data
+    networks:
+      - dinkylink_net
+
+  stats_api:
+    restart: always
+    image: dinkylink_stats_api
+    build:
+      context: services/stats/api
+      dockerfile: Dockerfile
+      args:
+        - STATS_API_PORT=${STATS_API_PORT}
+    env_file:
+      - .env
+    ports:
+      - 127.0.0.1:${STATS_API_PORT}:${STATS_API_PORT}
+    depends_on:
+      - bus
+    networks:
+      - dinkylink_net
+
 volumes:
   create_db_volume:
   view_db_volume:
   bus_volume:
   cache_volume:
+  stream_volume:
 
 networks:
   dinkylink_net:

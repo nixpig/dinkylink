@@ -9,6 +9,10 @@ export const startWebSocketServer = async () => {
 
   console.log("[view] created web socket server");
 
+  subscriber.subscribe("link_created", (message) => {
+    clients[JSON.parse(message).uuid].send(message);
+  });
+
   wss.on("connection", (ws, req) => {
     const {
       query: { uuid },
@@ -24,12 +28,7 @@ export const startWebSocketServer = async () => {
 
     console.log("[view] client connected to socket");
 
-    subscriber.subscribe("link_created", (message) => {
-      clients[JSON.parse(message).uuid].send(message);
-    });
-
     ws.on("close", () => {
-      subscriber.unsubscribe();
       console.log("[view] client disconnected from socket");
     });
 

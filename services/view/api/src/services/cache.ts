@@ -7,9 +7,10 @@ export const cache = createClient({
   url: connectionString,
 });
 
-subscriber.subscribe("link_created", (link) => {
+subscriber.subscribe("link_created", async (link) => {
   const data = JSON.parse(link);
 
   console.log(`[view] caching { "${data.shortCode}": "${data.targetUrl}" }`);
-  cache.set(data.shortCode, data.targetUrl);
+  const cached = await cache.set(data.shortCode, data.targetUrl);
+  console.log(`[view] cached: ${JSON.stringify(cached)}`);
 });
